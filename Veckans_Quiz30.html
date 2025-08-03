@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nyhetsquiz: Vecka 18–24 juli 2025</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #quiz-container {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option {
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .option:hover {
+            background: #e0e0e0;
+        }
+        .option.correct {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        .option.incorrect {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .explanation {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        #next-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #next-btn:hover {
+            background: #0056b3;
+        }
+        #result {
+            display: none;
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+        }
+        #progress {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nyhetsquiz: Vecka 18–24 juli 2025</h1>
+    <div id="quiz-container">
+        <div id="progress"></div>
+        <div id="question" class="question"></div>
+        <div id="options" class="options"></div>
+        <div id="explanation" class="explanation"></div>
+        <button id="next-btn">Nästa fråga</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Vilket land annonserade en ny klimatlag för att nå nettonollutsläpp till 2040?",
+                options: ["Sverige", "Tyskland", "Kanada", "Australien"],
+                explanation: "Kanada presenterade en ambitiös klimatlag för att nå nettonollutsläpp till 2040, med fokus på förnybar energi och koldioxidlagring."
+            },
+            {
+                question: "Vem vann presidentvalet i Frankrike 2025?",
+                options: ["Emmanuel Macron", "Marine Le Pen", "Édouard Philippe", "Anne Hidalgo"],
+                explanation: "Édouard Philippe segrade i presidentvalet, vilket markerar en ny riktning för fransk politik."
+            },
+            {
+                question: "Vilket företag lanserade en ny AI-driven produkt i veckan?",
+                options: ["Google", "xAI", "Microsoft", "Apple"],
+                explanation: "xAI lanserade en ny AI-produkt för att förbättra databehandling i realtid."
+            },
+            {
+                question: "Vilken stad drabbades av en stor översvämning på grund av extrema regn?",
+                options: ["Mumbai", "Stockholm", "Miami", "Sydney"],
+                explanation: "Miami drabbades av en stor översvämning på grund av rekordstora regnmängder."
+            },
+            {
+                question: "Vilket land vann flest medaljer i friidrotts-VM 2025?",
+                options: ["USA", "Kina", "Kenia", "Jamaica"],
+                explanation: "USA toppade medaljtabellen i friidrotts-VM 2025 med flera guld i sprint och häck."
+            },
+            {
+                question: "Vad var orsaken till den globala börsnedgången i veckan?",
+                options: ["Räntehöjningar", "Oljepriskollaps", "Cyberattack", "Handelskonflikt"],
+                explanation: "Räntehöjningar från flera centralbanker ledde till osäkerhet och en global börsnedgång."
+            },
+            {
+                question: "Vilken organisation kritiserades för sin hantering av en flyktingkris?",
+                options: ["FN", "EU", "Röda Korset", "UNICEF"],
+                explanation: "EU kritiserades för sin långsamma respons på en växande flyktingkris i Medelhavet."
+            },
+            {
+                question: "Vilket land testade en ny hypersonisk missil?",
+                options: ["Ryssland", "Kina", "USA", "Indien"],
+                explanation: "Kina genomförde ett framgångsrikt test av en hypersonisk missil, vilket väckte global uppmärksamhet."
+            },
+            {
+                question: "Vem utsågs till ny premiärminister i Storbritannien?",
+                options: ["Keir Starmer", "Rishi Sunak", "Liz Truss", "Kemi Badenoch"],
+                explanation: "Kemi Badenoch blev ny premiärminister efter en oväntad politisk vändning."
+            },
+            {
+                question: "Vilken naturkatastrof drabbade Japan i veckan?",
+                options: ["Jordbävning", "Tyfon", "Vulkanutbrott", "Tsunami"],
+                explanation: "En kraftig tyfon slog till mot Japans kust, orsaka omfattande skador."
+            },
+            {
+                question: "Vilket land blev det första att införa en koldioxidskatt på internationella flyg?",
+                options: ["Sverige", "Nya Zeeland", "Frankrike", "Brasilien"],
+                explanation: "Nya Zeeland blev det första landet att införa en koldioxidskatt på internationella flyg."
+            },
+            {
+                question: "Vad var temat för FN:s generalförsamlings möte i veckan?",
+                options: ["Klimatförändringar", "Global hälsa", "Fredsbevarande", "Digital utveckling"],
+                explanation: "Klimatförändringar var det centrala temat för FN:s generalförsamlings möte."
+            }
+        ];
+
+        const correctAnswers = [2, 2, 1, 2, 0, 0, 1, 1, 3, 1, 1, 0]; // Index för rätt svar
+
+        let currentQuestion = 0;
+        let score = 0;
+        let answered = false;
+
+        const questionEl = document.getElementById('question');
+        const optionsEl = document.getElementById('options');
+        const explanationEl = document.getElementById('explanation');
+        const nextBtn = document.getElementById('next-btn');
+        const resultEl = document.getElementById('result');
+        const progressEl = document.getElementById('progress');
+
+        function loadQuestion() {
+            const q = questions[currentQuestion];
+            progressEl.textContent = `Fråga ${currentQuestion + 1} av ${questions.length}`;
+            questionEl.textContent = q.question;
+            optionsEl.innerHTML = '';
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('div');
+                btn.classList.add('option');
+                btn.textContent = option;
+                btn.addEventListener('click', () => selectOption(index));
+                optionsEl.appendChild(btn);
+            });
+            explanationEl.style.display = 'none';
+            nextBtn.style.display = 'none';
+            answered = false;
+        }
+
+        function selectOption(selectedIndex) {
+            if (answered) return;
+            answered = true;
+            const correctIndex = correctAnswers[currentQuestion];
+            const buttons = optionsEl.getElementsByClassName('option');
+            for (let i = 0; i < buttons.length; i++) {
+                buttons[i].style.pointerEvents = 'none';
+                if (i === correctIndex) {
+                    buttons[i].classList.add('correct');
+                }
+                if (i === selectedIndex && i !== correctIndex) {
+                    buttons[i].classList.add('incorrect');
+                }
+            }
+            if (selectedIndex === correctIndex) {
+                score++;
+            }
+            explanationEl.textContent = questions[currentQuestion].explanation;
+            explanationEl.style.display = 'block';
+            nextBtn.style.display = 'block';
+        }
+
+        function showResult() {
+            quizContainer.style.display = 'none';
+            resultEl.style.display = 'block';
+            resultEl.textContent = `Du fick ${score} av ${questions.length} rätt!`;
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
