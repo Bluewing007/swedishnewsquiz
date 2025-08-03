@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Veckans nyhetsquiz – vecka 31 (27 juli – 2 augusti 2025)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #quiz { max-width: 600px; margin: auto; }
+        .option-btn { display: block; width: 100%; margin: 10px 0; padding: 10px; background-color: #f0f0f0; border: none; cursor: pointer; }
+        .option-btn:disabled { cursor: not-allowed; }
+        #explanation { font-style: italic; color: #555; }
+        #next-btn { margin-top: 20px; padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        #next-btn:disabled { background-color: #ccc; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <div id="quiz">
+        <h1>Veckans nyhetsquiz – vecka 31 (27 juli – 2 augusti 2025)</h1>
+        <p id="progress">Fråga 1/12</p>
+        <p id="question">Laddar...</p>
+        <button class="option-btn" onclick="answer(0)"></button>
+        <button class="option-btn" onclick="answer(1)"></button>
+        <button class="option-btn" onclick="answer(2)"></button>
+        <button class="option-btn" onclick="answer(3)"></button>
+        <p id="explanation"></p>
+        <button id="next-btn" onclick="nextQuestion()" disabled>Nästa</button>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "Vad handlar den interna splittringen i Moderaterna om?",
+                options: ["Skattepolitik", "Helvändning om Israel", "Miljöfrågor", "Invandringsregler"],
+                correct: 1,
+                explanation: "Internt missnöje efter helvändningen om Israel."
+            },
+            {
+                question: "Hur länge kan det regna enligt det senaste väderlarmet?",
+                options: ["50 timmar", "75 timmar", "100 timmar", "150 timmar"],
+                correct: 2,
+                explanation: "Väderlarmet varnar för upp till 100 timmar regn."
+            },
+            {
+                question: "Var brände kriminalvårdaren Ömer Sen ihjäl sig?",
+                options: ["I sitt hem", "Utanför Tidaholmsanstalten", "På jobbet inne i fängelset", "I bilen"],
+                correct: 1,
+                explanation: "Han brände ihjäl sig utanför Tidaholmsanstalten."
+            },
+            {
+                question: "Hur gammal var Jacob från Sala när han steriliserade sig?",
+                options: ["18", "26", "35", "45"],
+                correct: 1,
+                explanation: "Han var 26 år gammal."
+            },
+            {
+                question: "Vad hände på friluftsbadet som orsakade kaos?",
+                options: ["Bassängen användes som toalett", "En storm blåste omkull staket", "Badgäster bråkade", "Vattnet försvann"],
+                correct: 0,
+                explanation: "Bassängen användes som toalett, såg ut som en elefant gått runt."
+            },
+            {
+                question: "Vad uppmanar polisen folk att kolla i sökandet efter försvunne Juha, 71?",
+                options: ["Sina brevlådor", "Bluetooth", "Sina bilar", "Sina trädgårdar"],
+                correct: 1,
+                explanation: "Kolla er bluetooth, eftersom han bar airtag."
+            },
+            {
+                question: "Vilket väder bringar den 'polska cyklonen' med sig till Sverige?",
+                options: ["Solsken", "Regn, åska och blixtar", "Snöfall", "Starka vindar utan regn"],
+                correct: 1,
+                explanation: "Regn, åska och blixtar."
+            },
+            {
+                question: "Vad fick Kristin, 45, i Bräcke med posten?",
+                options: ["Böcker", "Ecstasy", "Klätterutrustning", "Matvaror"],
+                correct: 1,
+                explanation: "Hon fick ecstasy med posten, vilket var obehagligt."
+            },
+            {
+                question: "Var ägde masskjutningen rum där flera personer dog?",
+                options: ["Stockholm", "Bangkok", "New York", "Gaza"],
+                correct: 1,
+                explanation: "I Bangkok."
+            },
+            {
+                question: "Varför fick CNN kritik angående rapporteringen om skytten i New York?",
+                options: ["De ignorerade händelsen", "De kallade honom möjligtvis vit", "De publicerade fel namn", "De överdrev antalet offer"],
+                correct: 1,
+                explanation: "CNN-anchor sa att skytten var möjligtvis vit, men han var inte det."
+            },
+            {
+                question: "Vilket område i Sverige kan drabbas värst av det långvariga regnet?",
+                options: ["Östra Sverige", "Norra Norrland", "Västra Sverige från Bohuslän till södra Norrland", "Södra Skåne"],
+                correct: 2,
+                explanation: "Västra Sverige från Bohuslän upp till södra Norrland."
+            },
+            {
+                question: "I vilket land har ett förbud mot smartphones i skolan förbättrat inlärningen enligt en ny studie?",
+                options: ["Sverige", "Frankrike", "Nederländerna", "Storbritannien"],
+                correct: 2,
+                explanation: "I Nederländerna, enligt studie."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+
+        function validateQuestions() {
+            try {
+                JSON.parse(JSON.stringify(questions));
+                if (questions.length !== 12) throw new Error('Inte 12 frågor');
+                questions.forEach((q, i) => {
+                    if (!q.question || !Array.isArray(q.options) || q.options.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3 || !q.explanation) {
+                        throw new Error(`Ogiltig fråga ${i + 1}`);
+                    }
+                });
+                console.log('Questions validation succeeded');
+            } catch (error) {
+                console.error('Syntax error:', error);
+                document.getElementById('question').textContent = 'Fel i quizdata. Kontrollera konsolen.';
+                return false;
+            }
+            return true;
+        }
+
+        function loadQuestion() {
+            try {
+                const q = questions[currentQuestion];
+                if (!q) {
+                    document.getElementById('question').textContent = 'Ingen fråga tillgänglig';
+                    return;
+                }
+                document.getElementById('progress').textContent = `Fråga ${currentQuestion + 1}/12`;
+                document.getElementById('question').textContent = q.question || 'Ingen fråga';
+                const buttons = document.querySelectorAll('.option-btn');
+                buttons.forEach((btn, index) => {
+                    btn.textContent = q.options[index] || 'Inget alternativ';
+                    btn.disabled = false;
+                    btn.style.backgroundColor = '';
+                });
+                document.getElementById('explanation').textContent = '';
+                document.getElementById('next-btn').disabled = true;
+            } catch (error) {
+                console.error('Error loading question:', error);
+                document.getElementById('question').textContent = 'Fel vid laddning av fråga.';
+            }
+        }
+
+        function answer(selected) {
+            const q = questions[currentQuestion];
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.disabled = true);
+            if (selected === q.correct) {
+                buttons[selected].style.backgroundColor = 'green';
+                score++;
+            } else {
+                buttons[selected].style.backgroundColor = 'red';
+                buttons[q.correct].style.backgroundColor = 'green';
+            }
+            document.getElementById('explanation').textContent = q.explanation;
+            document.getElementById('next-btn').disabled = false;
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showScore();
+            }
+        }
+
+        function showScore() {
+            document.getElementById('question').textContent = 'Quizet är slut!';
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach(btn => btn.style.display = 'none');
+            document.getElementById('explanation').textContent = `Du fick ${score}/12 rätt.`;
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing...');
+            const currentDate = new Date();
+            console.log('Verified date: ' + currentDate.toISOString().split('T')[0]);
+            if (validateQuestions()) {
+                loadQuestion();
+            }
+        });
+    </script>
+</body>
+</html>
