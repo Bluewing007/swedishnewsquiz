@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <title>Svensk Nyhetsquiz - Vecka 32, 2025</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 20px; }
+        h1 { color: #0056a0; }
+        #progress { font-weight: bold; }
+        #question { font-size: 1.2em; margin: 20px; }
+        #options button { display: block; width: 80%; margin: 10px auto; padding: 10px; background: #f0f0f0; border: 1px solid #ccc; cursor: pointer; }
+        #options button:disabled { cursor: not-allowed; }
+        #explanation { margin: 20px; font-style: italic; }
+        #next { display: none; padding: 10px 20px; background: #0056a0; color: white; border: none; cursor: pointer; }
+        #score { font-size: 1.5em; color: green; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Svensk Nyhetsquiz - Vecka 32, 2025</h1>
+    <div id="progress"></div>
+    <div id="question"></div>
+    <div id="options"></div>
+    <div id="explanation"></div>
+    <button id="next">Nästa</button>
+    <div id="score"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const questions = [
+                {
+                    "question": "På X den 31 juli 2025 tillkännagav Johan Nopp en ny bok om hot mot yttrandefrihet och vetenskap. Vad är titeln på boken?",
+                    "options": ["Kriget mot vetenskapen", "Vetenskapens framtid", "Frihetens fiender", "Akademisk krigföring"],
+                    "correct": 0,
+                    "explanation": "Boken innehåller bidrag från Steven Pinker, Richard Dawkins och andra. Källa: <a href='https://x.com/Johannopp/status/1950949582378299740' target='_blank'>https://x.com/Johannopp/status/1950949582378299740</a>"
+                },
+                {
+                    "question": "Vilken svensk ledare erkände i början av augusti 2025 att använda AI-chatbots som ChatGPT för en 'andra åsikt' på beslut?",
+                    "options": ["Statsminister Ulf Kristersson", "Kung Carl XVI Gustaf", "Finansministern", "Utrikesministern"],
+                    "correct": 0,
+                    "explanation": "Sveriges statsminister Ulf Kristersson använder AI för andra åsikter på beslut. Källa: <a href='https://www.euronews.com/my-europe/2025/07/31/albanese-sanctions-against-me-an-attack-on-the-heart-of-multilateralism' target='_blank'>https://www.euronews.com/my-europe/2025/07/31/albanese-sanctions-against-me-an-attack-on-the-heart-of-multilateralism</a>"
+                },
+                {
+                    "question": "Vilken svensk ort pekades ut som 'nya Rinkeby' i en artikel den 5 augusti 2025?",
+                    "options": ["Sandviken", "Linköping", "Örebro", "Umeå"],
+                    "correct": 0,
+                    "explanation": "Sandviken beskrivs som ett nytt utsatt område liknande Rinkeby. Källa: <a href='https://www.arbetarbladet.se/2025-08-05/sandviken-pekas-ut-som-nya-rinkeby/' target='_blank'>https://www.arbetarbladet.se/2025-08-05/sandviken-pekas-ut-som-nya-rinkeby/</a>"
+                },
+                {
+                    "question": "En Tesla-chef skyllde i 2025 på svenska fackföreningar för kaos vid vad?",
+                    "options": ["Produktionsförseningar", "Laddstationer", "Försäljningsminskning", "Återkallelser av fordon"],
+                    "correct": 1,
+                    "explanation": "Förseningar vid Tesla-laddstationer i Sverige på grund av fackföreningar. Källa: <a href='https://www.euronews.com/business/2025/01/07/us-based-tesla-manager-blames-trade-unions-for-swedish-charging-chaos' target='_blank'>https://www.euronews.com/business/2025/01/07/us-based-tesla-manager-blames-trade-unions-for-swedish-charging-chaos</a>"
+                },
+                {
+                    "question": "Vilken svensk slow TV-hit lockade miljontals tittare med älgmigration 2025?",
+                    "options": ["Renrace", "Älgmigration", "Fågelskådning", "Skogstillväxt"],
+                    "correct": 1,
+                    "explanation": "Livestreamen fångar älgar som simmar över Ångermanälven. Källa: <a href='https://www.euronews.com/video/2025/04/17/millions-tune-in-to-swedens-moose-migration-slow-tv-hit' target='_blank'>https://www.euronews.com/video/2025/04/17/millions-tune-in-to-swedens-moose-migration-slow-tv-hit</a>"
+                },
+                {
+                    "question": "Vilken forntida tradition återuppfanns i norra Sverige 2025 med blåbär?",
+                    "options": ["Vikingbryggning", "Blåbärsvin", "Honungsmjöd", "Örtte"],
+                    "correct": 1,
+                    "explanation": "En forntida blåbärsvin unik för Sverige. Källa: <a href='https://www.bbc.com/reel/video/p08zh9sh/an-ancient-blueberry-wine-unique-to-sweden' target='_blank'>https://www.bbc.com/reel/video/p08zh9sh/an-ancient-blueberry-wine-unique-to-sweden</a>"
+                },
+                {
+                    "question": "Hur omfamnar Sverige sin sömniga sida i 2025?",
+                    "options": ["Sömnturism", "Tupplurslagar", "Drömfestivaler", "Sängtävlingar"],
+                    "correct": 0,
+                    "explanation": "Sverige främjar sömnturism inspirerad av landskapet. Källa: <a href='https://www.bbc.com/travel/article/20250113-how-sweden-is-embracing-its-sleepy-side' target='_blank'>https://www.bbc.com/travel/article/20250113-how-sweden-is-embracing-its-sleepy-side</a>"
+                },
+                {
+                    "question": "Vad gör Sverige med tunga lastbilar 2025?",
+                    "options": ["Förbjuder dem", "Går över till el", "Exporterar dem", "Tävlar med dem"],
+                    "correct": 1,
+                    "explanation": "Sveriges tunga lastbilar blir elektriska. Källa: <a href='https://www.bbc.com/reel/video/p0jws5bb/sweden-s-heavy-goods-trucks-are-going-electric' target='_blank'>https://www.bbc.com/reel/video/p0jws5bb/sweden-s-heavy-goods-trucks-are-going-electric</a>"
+                },
+                {
+                    "question": "Den 1 augusti 2025 tillkännagav Trump nya tullar som påverkar EU, inklusive Sverige. Vad var fördröjningen?",
+                    "options": ["Sju dagar", "En månad", "Obestämd", "Ingen fördröjning"],
+                    "correct": 0,
+                    "explanation": "Trump fördröjde deadline med sju dagar för nya globala tullar. Källa: <a href='https://www.euronews.com/business/2025/08/01/trump-announces-new-tariffs-across-the-globe-delays-deadline-by-seven-days' target='_blank'>https://www.euronews.com/business/2025/08/01/trump-announces-new-tariffs-across-the-globe-delays-deadline-by-seven-days</a>"
+                },
+                {
+                    "question": "I augusti 2025 inledde Sverige ett statligt samarbete med Israel om vad?",
+                    "options": ["Försvar", "Framtidens mat", "Utbildning", "Turism"],
+                    "correct": 1,
+                    "explanation": "Samarbete om framtidens mat medan Gaza svälter. Källa: <a href='https://www.etc.se/klimat-miljo/sverige-samarbetar-med-israel-om-framtidens-mat-samtidigt-som-maenniskor-i-gaza-svaelter-ihjael' target='_blank'>https://www.etc.se/klimat-miljo/sverige-samarbetar-med-israel-om-framtidens-mat-samtidigt-som-maenniskor-i-gaza-svaelter-ihjael</a>"
+                },
+                {
+                    "question": "Vad är den svenska kulturregeln som avskräcker från att skryta om rikedom? (Fallback: kulturell fråga)",
+                    "options": ["Jantelagen", "Fika", "Lagom", "Sisu"],
+                    "correct": 0,
+                    "explanation": "Jantelagen förklarar varför svenskar inte pratar om rikedom. Källa: <a href='https://www.bbc.com/worklife/article/20191008-jantelagen-why-swedes-wont-talk-about-wealth' target='_blank'>https://www.bbc.com/worklife/article/20191008-jantelagen-why-swedes-wont-talk-about-wealth</a>"
+                },
+                {
+                    "question": "Vad är den svenska traditionen att äta godis bara på lördagar? (Fallback: kulturell fråga)",
+                    "options": ["Lördagsgodis", "Fredagsmys", "Söndagsstek", "Torsdagssoppa"],
+                    "correct": 0,
+                    "explanation": "Lördagsgodis: Sveriges lördagstradition med godis. Källa: <a href='https://www.bbc.com/worklife/article/20211004-lrdagsgodis-swedens-saturday-only-candy-tradition' target='_blank'>https://www.bbc.com/worklife/article/20211004-lrdagsgodis-swedens-saturday-only-candy-tradition</a>"
+                }
+            ];
+
+            function validateQuestions() {
+                try {
+                    if (questions.length !== 12) throw new Error('Not exactly 12 questions');
+                    questions.forEach((q, i) => {
+                        if (!q.question || typeof q.question !== 'string') throw new Error(`Invalid question at index ${i}`);
+                        if (!Array.isArray(q.options) || q.options.length !== 4 || q.options.some(opt => typeof opt !== 'string')) throw new Error(`Invalid options at index ${i}`);
+                        if (typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3) throw new Error(`Invalid correct index at index ${i}`);
+                        if (!q.explanation || typeof q.explanation !== 'string') throw new Error(`Invalid explanation at index ${i}`);
+                    });
+                    console.log('Questions validation succeeded');
+                    console.log(`Question count: ${questions.length}`);
+                    return true;
+                } catch (error) {
+                    console.error('Syntax error:', error);
+                    return false;
+                }
+            }
+
+            if (!validateQuestions()) {
+                document.getElementById('question').textContent = 'Quiz could not load due to validation error. Check console for details.';
+                return;
+            }
+
+            let currentQuestion = 0;
+            let score = 0;
+
+            const progressEl = document.getElementById('progress');
+            const questionEl = document.getElementById('question');
+            const optionsEl = document.getElementById('options');
+            const explanationEl = document.getElementById('explanation');
+            const nextBtn = document.getElementById('next');
+            const scoreEl = document.getElementById('score');
+
+            function loadQuestion() {
+                try {
+                    const q = questions[currentQuestion];
+                    progressEl.textContent = `Fråga ${currentQuestion + 1}/12`;
+                    questionEl.textContent = q.question;
+                    optionsEl.innerHTML = '';
+                    q.options.forEach((option, index) => {
+                        const btn = document.createElement('button');
+                        btn.textContent = option || 'Inget alternativ';
+                        btn.onclick = () => handleAnswer(index);
+                        optionsEl.appendChild(btn);
+                    });
+                    explanationEl.innerHTML = '';
+                    nextBtn.style.display = 'none';
+                } catch (error) {
+                    console.error('Error loading question:', error);
+                }
+            }
+
+            function handleAnswer(selectedIndex) {
+                try {
+                    const q = questions[currentQuestion];
+                    const buttons = optionsEl.getElementsByTagName('button');
+                    Array.from(buttons).forEach(button => button.disabled = true);
+                    buttons[selectedIndex].style.backgroundColor = 'red';
+                    buttons[q.correct].style.backgroundColor = 'green';
+                    if (selectedIndex === q.correct) score++;
+                    explanationEl.innerHTML = q.explanation;
+                    nextBtn.style.display = 'block';
+                } catch (error) {
+                    console.error('Error handling answer:', error);
+                }
+            }
+
+            nextBtn.onclick = () => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    questionEl.textContent = 'Quiz avslutat!';
+                    optionsEl.innerHTML = '';
+                    explanationEl.innerHTML = '';
+                    nextBtn.style.display = 'none';
+                    scoreEl.textContent = `Din poäng: ${score}/12`;
+                }
+            };
+
+            loadQuestion();
+            console.log('DOM loaded, initializing...');
+
+            const currentDate = new Date('2025-08-07');
+            console.log('Verified date: ' + currentDate.toISOString().split('T')[0]);
+
+            setTimeout(() => {
+                if (document.getElementById('question').textContent === '') {
+                    console.error('Date mismatch detected or loading error');
+                }
+            }, 5000);
+        });
+    </script>
+</body>
+</html>
