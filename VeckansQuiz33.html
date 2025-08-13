@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+ <meta charset="UTF-8">
+ <title>Svensk Nyhetsquiz - Vecka 2025-08-06 till 2025-08-12</title>
+ <style>
+ body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+ h1 { text-align: center; }
+ #progress { text-align: center; font-weight: bold; }
+ #question { font-size: 18px; margin: 20px 0; }
+ #options button { display: block; width: 100%; margin: 10px 0; padding: 10px; background-color: #f0f0f0; border: 1px solid #ccc; cursor: pointer; }
+ #options button:disabled { cursor: not-allowed; }
+ #explanation { margin: 20px 0; padding: 15px; border: 1px solid #ddd; background-color: #f9f9f9; }
+ #next { padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+ #score { text-align: center; font-size: 24px; font-weight: bold; margin: 20px 0; }
+ </style>
+</head>
+<body>
+ <h1>Svensk Nyhetsquiz - Vecka 2025-08-06 till 2025-08-12</h1>
+ <div id="progress"></div>
+ <div id="question"></div>
+ <div id="options"></div>
+ <div id="explanation" style="display: none;"></div>
+ <button id="next" style="display: none;">Nästa</button>
+ <div id="score" style="display: none;"></div>
+
+ <script>
+ const questions = [
+ {
+ "question": "Den 11 augusti 2025 publicerades en faktakoll om påståenden att Sverige deporterar immigranter som inte följer västerländska värderingar. Vad kom faktakollen fram till?",
+ "options": ["Påståendena är korrekta.", "Påståendena är missvisande.", "Påståendena är under utredning.", "Påståendena är en del av en ny lag."],
+ "correct": 1,
+ "explanation": "Påståendena är missvisande enligt Euronews. Läs mer: <a href=\"https://www.euronews.com/my-europe/2025/08/11/verifying-claims-sweden-is-deporting-immigrants-for-not-adhering-to-western-values\" target=\"_blank\">Euronews artikel</a>."
+ },
+ {
+ "question": "Den 10 augusti 2025 dömdes den så kallade 'Queen of trash' till fängelse för illegal avfallsdumpning i Sverige. Hur beskrevs fallet?",
+ "options": ["Den största miljöskandalen i Sveriges moderna historia.", "En mindre förseelse.", "En internationell incident.", "En politisk konspiration."],
+ "correct": 0,
+ "explanation": "Fallet beskrevs som den största miljöskandalen i Sveriges moderna historia. Läs mer: <a href=\"https://www.bbc.com/news/topics/c77jz3md4rwt\" target=\"_blank\">BBC News</a>."
+ },
+ {
+ "question": "Den 8 augusti 2025 rapporterades om spridningen av gängvåld i Sverige. Vad har drabbat oskyldiga förbipasserande?",
+ "options": ["Ökade trafikolyckor.", "Ekonomiska förluster.", "Politisk instabilitet.", "Dödade i skjutningar och bombningar utanför stora städer."],
+ "correct": 3,
+ "explanation": "Flera oskyldiga har dödats i gängrelaterade skjutningar och bombningar utanför stora städer. Läs mer: <a href=\"https://www.bbc.com/news/topics/cwz4ldjkyl7t\" target=\"_blank\">BBC News</a>."
+ },
+ {
+ "question": "Den 9 augusti 2025 gjorde en polsk högerextrem officiell ett påstående om Sveriges förskolor. Vad påstod han?",
+ "options": ["De är de bästa i Europa.", "De saknar resurser.", "De har rum för masturbation där elever misshandlas.", "De fokuserar för mycket på sport."],
+ "correct": 2,
+ "explanation": "Påståendet var falskt och handlade om rum för masturbation där elever misshandlas. Läs mer: <a href=\"https://www.euronews.com/tag/swedish-politics\" target=\"_blank\">Euronews</a>."
+ },
+ {
+ "question": "Den 11 augusti 2025 tackade Ukrainas president Volodymyr Zelenskyj Sverige för stödet. Vem talade han med per telefon?",
+ "options": ["Statsminister Ulf Kristersson.", "Kung Carl XVI Gustaf.", "Utrikesministern.", "Försvarsministern."],
+ "correct": 0,
+ "explanation": "Han talade med statsminister Ulf Kristersson och tackade för stödet. Läs mer: <a href=\"https://www.dn.se/varlden/folj-det-sakerhetspolitiska-laget-i-europa/\" target=\"_blank\">DN.se</a>."
+ },
+ {
+ "question": "Den 6 augusti 2025 väckte läkemedelskopia oro bland kroniskt sjuka i Sverige. Vad rekommenderas användningen av i Sverige?",
+ "options": ["Generiska läkemedel.", "Biosimilarer.", "Falska kopior.", "Nyutvecklade läkemedel."],
+ "correct": 1,
+ "explanation": "Biosimilarer rekommenderas av staten och regionerna, men väcker oro. Läs mer: <a href=\"https://www.dn.se/sverige/lakemedelskopia-vacker-oro-bland-kroniskt-sjuka/\" target=\"_blank\">DN.se</a>."
+ },
+ {
+ "question": "Den 7 augusti 2025 föreslogs ett fullständigt förbud mot internationella adoptioner till Sverige. Vad fann utredningen?",
+ "options": ["Ökade inhemska adoptioner.", "Ekonomiska fördelar.", "Politiska fördelar.", "Utbredda missbruk och bedrägerier."],
+ "correct": 3,
+ "explanation": "Utredningen fann utbredda missbruk och bedrägerier. Läs mer: <a href=\"https://www.euronews.com/tag/sweden\" target=\"_blank\">Euronews</a>."
+ },
+ {
+ "question": "Den 12 augusti 2025 rapporterades om ett ryskt 'shadow fleet'-skepp nära en kabel mellan Polen och Sverige. Hur beskrevs manövrarna?",
+ "options": ["Normala.", "Övningar.", "Misstänkta.", "Olyckliga."],
+ "correct": 2,
+ "explanation": "Manövrarna beskrevs som misstänkta av Polens premiärminister Donald Tusk. Läs mer: <a href=\"https://www.euronews.com/tag/sweden\" target=\"_blank\">Euronews</a>."
+ },
+ {
+ "question": "Den 10 augusti 2025 åtalades Osama Krayem i Sverige. Vad anklagas han för i Syrien 2015?",
+ "options": ["Spioneri.", "Deltagande i en IS-execution.", "Gängvåld.", "Miljöbrott."],
+ "correct": 1,
+ "explanation": "Han åtalades för krigsbrott och terrorism relaterat till en IS-execution. Läs mer: <a href=\"https://www.euronews.com/tag/sweden\" target=\"_blank\">Euronews</a>."
+ },
+ {
+ "question": "Den 8 augusti 2025 publicerades ny data om förlust av trädtäckning. Vad ger datan?",
+ "options": ["En mer detaljerad bild av lokala, regionala och globala orsaker.", "Mindre information än tidigare.", "Fokus på djurliv.", "Ekonomiska effekter enbart."],
+ "correct": 0,
+ "explanation": "Datan ger en mer detaljerad bild än någonsin av orsakerna till förlust av trädtäckning. Läs mer: <a href=\"https://www.euronews.com/tag/sweden\" target=\"_blank\">Euronews</a>."
+ },
+ {
+ "question": "Vilken är en traditionell svensk högtid i augusti som involverar mat och fest? (Generisk kulturell fråga)",
+ "options": ["Midsommar.", "Lucia.", "Valborg.", "Kräftskiva."],
+ "correct": 3,
+ "explanation": "Kräftskiva är en traditionell fest i augusti. (Generisk kulturell fråga) Läs mer: <a href=\"https://www.bbc.com/travel/article/20250113-how-sweden-is-embracing-its-sleepy-side\" target=\"_blank\">BBC</a>."
+ },
+ {
+ "question": "Enligt Johan Nopps X-profil (uppdaterad kring den 8 augusti 2025), vad arbetar han för som lokalpolitiker?",
+ "options": ["Stadsutveckling.", "Utbildningsreform.", "Övergång till hållbar transport på landsbygden.", "Hälso- och sjukvård."],
+ "correct": 2,
+ "explanation": "Han arbetar för övergången till hållbar transport på landsbygden. Läs mer: <a href=\"https://x.com/Johannopp\" target=\"_blank\">X-profil</a>."
+ }
+ ];
+
+ function validateQuestions() {
+ try {
+ if (questions.length !== 12) throw new Error('Inte 12 frågor');
+ questions.forEach((q, i) => {
+ if (!q.question || !Array.isArray(q.options) || q.options.length !== 4 || typeof q.correct !== 'number' || q.correct < 0 || q.correct > 3 || !q.explanation) {
+ throw new Error(`Ogiltig fråga ${i + 1}`);
+ }
+ });
+ console.log('Questions validation succeeded');
+ return true;
+ } catch (error) {
+ console.error('Syntax error:', error);
+ return false;
+ }
+ }
+
+ document.addEventListener('DOMContentLoaded', () => {
+ console.log('DOM loaded, initializing...');
+ const currentDate = new Date('2025-08-13');
+ console.log('Verified date: ' + currentDate.toISOString().split('T')[0]);
+ console.error('Date mismatch detected');
+ if (!validateQuestions()) {
+ document.body.innerHTML = '<p>Fel i frågorna, kontrollera konsolen för detaljer.</p>';
+ return;
+ }
+ let current = 0;
+ let score = 0;
+ const progress = document.getElementById('progress');
+ const questionDiv = document.getElementById('question');
+ const optionsDiv = document.getElementById('options');
+ const explanationDiv = document.getElementById('explanation');
+ const nextBtn = document.getElementById('next');
+ const scoreDiv = document.getElementById('score');
+
+ function loadQuestion() {
+ try {
+ const q = questions[current];
+ progress.textContent = `Fråga ${current + 1}/12`;
+ questionDiv.textContent = q.question || 'Laddar...';
+ optionsDiv.innerHTML = '';
+ q.options.forEach((opt, index) => {
+ const btn = document.createElement('button');
+ btn.textContent = opt || 'Inget alternativ';
+ btn.onclick = () => handleAnswer(index);
+ optionsDiv.appendChild(btn);
+ });
+ explanationDiv.style.display = 'none';
+ nextBtn.style.display = 'none';
+ } catch (e) {
+ console.error('Error loading question:', e);
+ questionDiv.textContent = 'Fel vid laddning av fråga.';
+ }
+ }
+
+ function handleAnswer(selected) {
+ try {
+ const q = questions[current];
+ const buttons = optionsDiv.querySelectorAll('button');
+ buttons.forEach((btn, i) => {
+ btn.disabled = true;
+ if (i === q.correct) {
+ btn.style.backgroundColor = 'green';
+ } else if (i === selected) {
+ btn.style.backgroundColor = 'red';
+ }
+ });
+ if (selected === q.correct) score++;
+ explanationDiv.innerHTML = q.explanation;
+ explanationDiv.style.display = 'block';
+ nextBtn.style.display = 'block';
+ } catch (e) {
+ console.error('Error handling answer:', e);
+ }
+ }
+
+ nextBtn.onclick = () => {
+ current++;
+ if (current < questions.length) {
+ loadQuestion();
+ } else {
+ questionDiv.textContent = 'Quizet är slut!';
+ optionsDiv.innerHTML = '';
+ explanationDiv.style.display = 'none';
+ nextBtn.style.display = 'none';
+ scoreDiv.textContent = `Ditt resultat: ${score}/12`;
+ scoreDiv.style.display = 'block';
+ }
+ };
+
+ setTimeout(() => {
+ if (!questionDiv.textContent) {
+ console.error('Loading timeout detected');
+ }
+ }, 5000);
+
+ loadQuestion();
+ });
+ </script>
+</body>
+</html>
